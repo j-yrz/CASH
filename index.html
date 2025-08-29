@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Keuangan</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+<h1>Laporan Keuangan</h1>
+<div class="summary">
+  <div class="card income">💰<strong>Pemasukan</strong><span id="totalIncome">Rp 0</span></div>
+  <div class="card expense">🛑<strong>Pengeluaran</strong><span id="totalExpense">Rp 0</span></div>
+  <div class="card balance">🏦<strong>Saldo</strong><span id="balance">Rp 0</span></div>
+</div>
+<div id="chartContainer">
+  <div class="bar incomeBar" style="width:50%"></div>
+  <div class="bar expenseBar" style="width:50%"></div>
+</div>
+</header>
+
+<div class="container">
+<div class="form-group">
+  <input type="date" id="dateInput">
+  <input type="text" id="descInput" placeholder="Deskripsi">
+  <input type="text" id="amountInput" placeholder="Jumlah">
+  <select id="memberSelect" onchange="memberOptionChange()"></select>
+  <input type="text" id="sourceInput" placeholder="Sumber Dana">
+  <select id="typeInput">
+    <option value="pemasukan">Pemasukan</option>
+    <option value="pengeluaran">Pengeluaran</option>
+  </select>
+  <button class="btn-add" onclick="addTransaction()">Tambah Transaksi</button>
+</div>
+
+<div class="filter-group">
+  <select id="filterMember"><option value="all">Semua Anggota</option></select>
+  <select id="filterType">
+    <option value="all">Semua Tipe</option>
+    <option value="pemasukan">Pemasukan</option>
+    <option value="pengeluaran">Pengeluaran</option>
+  </select>
+  <button onclick="applyFilter()">Terapkan Filter</button>
+</div>
+
+<button class="btn-delete-selected" id="btnDeleteSelected" onclick="deleteSelected()">Hapus Terpilih</button>
+
+<div class="table-container">
+<table>
+<thead>
+  <tr>
+    <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
+    <th>No</th>
+    <th>Tanggal</th>
+    <th>Deskripsi</th>
+    <th>Anggota</th>
+    <th>Sumber Dana</th>
+    <th>Pemasukan</th>
+    <th>Pengeluaran</th>
+    <th>Status</th>
+    <th>Aksi</th>
+  </tr>
+</thead>
+<tbody id="transactionTable"></tbody>
+</table>
+</div>
+
+<button class="btn-exp" onclick="exportExcel()">Export Excel</button>
+</div>
+
+<!-- Tooltip global -->
+<div id="editTooltip"></div>
+
+<!-- Modal Edit -->
+<div id="editModal" class="modal"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
