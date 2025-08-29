@@ -1,6 +1,5 @@
 /* ===================== */
-/* SCRIPT JS UTAMA BAGIAN 1 */
-/* Inisialisasi & Helper */
+/* BAGIAN 1 – Inisialisasi & Helper (FULL) */
 /* ===================== */
 
 const dateInput = document.getElementById("dateInput");
@@ -58,14 +57,18 @@ function memberOptionChange(){
   const val = memberSelect.value;
   if(val === "+"){
     const name = prompt("Masukkan nama anggota baru:").trim();
-    if(name && !members.includes(name)) members.push(name);
-    saveData(); renderMembers();
+    if(name && !members.includes(name)) {
+      members.push(name);
+      saveData(); renderMembers();
+    }
   } else if(val === "-"){
     if(members.length===0){ alert("Tidak ada anggota tersisa!"); return; }
-    const name = prompt("Pilih anggota untuk dihapus:\n"+members.join("\n"));
+    const name = prompt(`Pilih anggota untuk dihapus:\n${members.join(", ")}`);
     if(name && members.includes(name)){
-      members = members.filter(m => m!==name);
-      saveData(); renderMembers();
+      if(confirm(`Hapus anggota "${name}" dari daftar?`)){
+        members = members.filter(m => m!==name);
+        saveData(); renderMembers();
+      }
     }
   }
 }
@@ -77,9 +80,26 @@ function renderChart(){
   document.querySelector(".incomeBar").style.width = (incomeTotal/total*100)+"%";
   document.querySelector(".expenseBar").style.width = (expenseTotal/total*100)+"%";
 }
+
 /* ===================== */
-/* SCRIPT JS BAGIAN 2    */
-/* Fungsi Transaksi & Modal Edit */
+/* Fungsi lihat riwayat edit saat klik (diedit) */
+/* ===================== */
+function showEditHistory(index){
+  const t = transactions[index];
+  if(!t.editHistory || t.editHistory.length===0) {
+    alert("Belum ada riwayat edit.");
+    return;
+  }
+  let msg = "Riwayat Edit:\n\n";
+  t.editHistory.forEach(h=>{
+    msg += `${h.date}\n`;
+    h.changes.forEach(c => msg += `- ${c}\n`);
+    msg += "\n";
+  });
+  alert(msg);
+}
+/* ===================== */
+/* BAGIAN 2 – Fungsi Transaksi & Modal Edit (FULL) */
 /* ===================== */
 
 function addTransaction(){
@@ -200,8 +220,7 @@ function saveEdit(i){
   closeModal();
 }
 /* ===================== */
-/* SCRIPT JS BAGIAN 3    */
-/* Tooltip, RenderTable, Filter, Export */
+/* BAGIAN 3 – RenderTable, Tooltip, Filter, Export, Init (FULL) */
 /* ===================== */
 
 function renderTable(filtered=[]){
@@ -215,7 +234,7 @@ function renderTable(filtered=[]){
     else totalExpense+=t.amount;
 
     const statusHTML = t.edited
-      ? `<span class="statusCell" onmouseenter="showTooltip(event, ${i})" onmouseleave="hideTooltip()">(diedit)</span>`
+      ? `<span class="statusCell" onclick="showEditHistory(${i})">(diedit)</span>`
       : "";
 
     table.innerHTML += `
@@ -241,7 +260,7 @@ function renderTable(filtered=[]){
 }
 
 /* ===================== */
-/* Tooltip detail edit   */
+/* Tooltip detail edit hover (optional) */
 /* ===================== */
 function showTooltip(e, index){
   const t = transactions[index];
